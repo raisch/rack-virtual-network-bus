@@ -362,6 +362,8 @@ bool DiscoveryManager::Start() {
     return true;
   }
   if (!socket_->Open() || !socket_->Bind(config_.port) ||
+      (!config_.interface_address.empty() &&
+       !socket_->SetMulticastInterface(config_.interface_address)) ||
       !socket_->JoinMulticast(config_.multicast_group,
                               config_.interface_address)) {
     socket_->Close();

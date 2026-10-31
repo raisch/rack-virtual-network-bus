@@ -3,7 +3,8 @@ CXXFLAGS ?= -std=c++11 -Wall -Wextra -Wpedantic -Werror -pthread
 
 INCLUDE_FLAGS := -Isrc -I../src
 NETWORK_SOURCES := ../src/network/discovery.cc ../src/network/protocol.cc \
-	../src/network/socket.cc ../src/network/topic.cc ../src/network/transport.cc
+	../src/network/interface.cc ../src/network/socket.cc ../src/network/topic.cc \
+	../src/network/transport.cc
 
 .PHONY: all test clean
 

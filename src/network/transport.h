@@ -3,6 +3,7 @@
 
 #include "network/protocol.h"
 #include "network/topic.h"
+#include "network/interface.h"
 
 #include <array>
 #include <atomic>
@@ -121,6 +122,11 @@ class BusRuntime {
 
   bool Start();
   void Stop();
+  bool SetInterface(const std::string& interface_name);
+  std::string RequestedInterface() const;
+  std::string ResolvedInterface() const;
+  std::string InterfaceError() const;
+  std::vector<NetworkInterface> Interfaces() const;
   bool PublishCv(const std::string& topic, const CvState& state);
   void Register(CvSubscription* subscription);
   void Unregister(CvSubscription* subscription);
@@ -137,7 +143,11 @@ class BusRuntime {
   class UdpSocket* socket_;
   BoundedQueue<OutboundCvFrame, 64> outbound_;
   std::mutex* subscriptions_mutex_;
+  mutable std::mutex* interface_mutex_;
   std::vector<CvSubscription*> subscriptions_;
+  std::string requested_interface_;
+  NetworkInterface resolved_interface_;
+  std::string interface_error_;
   std::array<std::uint8_t, kIdentifierSize> node_id_;
   std::array<std::uint8_t, kIdentifierSize> session_id_;
   std::uint64_t sequence_;

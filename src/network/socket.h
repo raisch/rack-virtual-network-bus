@@ -17,6 +17,7 @@ class UdpSocket {
 
   bool Open();
   bool Bind(std::uint16_t port);
+  bool SetMulticastInterface(const std::string& interface_address);
   bool JoinMulticast(const std::string& group,
                      const std::string& interface_address);
   bool LeaveMulticast(const std::string& group,

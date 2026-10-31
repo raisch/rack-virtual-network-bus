@@ -54,6 +54,19 @@ Search the module browser for:
 
 Right-click a module body to select the topic and view diagnostics.
 
+## Select the network interface
+
+The publisher and subscriber share one network-interface setting within a Rack
+process. Right-click either module and use **Network interface** to choose:
+
+- **Automatic**, which selects the active multicast-capable interface;
+- an explicit interface such as `Wi-Fi (en0)` or `Ethernet (en1)`.
+
+The menu displays the resolved interface and IPv4 address. Discovery and CV
+transport use the same selected interface. If the selected interface is
+unavailable, the module context menu reports the error rather than silently
+switching to another interface.
+
 ## Build both packages
 
 Run these commands from the plugin repository:
@@ -135,4 +148,3 @@ slugs:
 
 Make sure the installed package contains the `res/Panel.svg` resource. Rebuild
 and reinstall the package if the resource is missing.
-

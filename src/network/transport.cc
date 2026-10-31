@@ -256,6 +256,7 @@ BusRuntime::BusRuntime()
       worker_(NULL),
       socket_(new UdpSocket()),
       subscriptions_mutex_(new std::mutex()),
+      interface_mutex_(new std::mutex()),
       sequence_(0) {
   node_id_.fill(0);
   session_id_.fill(0);
@@ -268,19 +269,66 @@ BusRuntime::BusRuntime()
 BusRuntime::~BusRuntime() {
   Stop();
   delete subscriptions_mutex_;
+  delete interface_mutex_;
   delete socket_;
 }
 
 bool BusRuntime::Start() {
   if (running_.load()) return true;
+  NetworkInterface resolved;
+  std::string error;
+  {
+    std::lock_guard<std::mutex> lock(*interface_mutex_);
+    if (!ResolveNetworkInterface(requested_interface_, &resolved, &error)) {
+      interface_error_ = error;
+      resolved_interface_ = NetworkInterface();
+      return false;
+    }
+    resolved_interface_ = resolved;
+    interface_error_.clear();
+  }
   if (!socket_->Open() || !socket_->Bind(47001) ||
-      !socket_->JoinMulticast("239.192.0.11", "")) {
+      !socket_->SetMulticastInterface(resolved.ipv4_address) ||
+      !socket_->JoinMulticast("239.192.0.11", resolved.ipv4_address)) {
     socket_->Close();
+    std::lock_guard<std::mutex> lock(*interface_mutex_);
+    interface_error_ = socket_->last_error();
     return false;
   }
   running_.store(true);
   worker_ = new std::thread(&BusRuntime::Run, this);
   return true;
+}
+
+bool BusRuntime::SetInterface(const std::string& interface_name) {
+  {
+    std::lock_guard<std::mutex> lock(*interface_mutex_);
+    requested_interface_ = interface_name;
+  }
+  if (running_.load()) {
+    Stop();
+    return Start();
+  }
+  return true;
+}
+
+std::string BusRuntime::RequestedInterface() const {
+  std::lock_guard<std::mutex> lock(*interface_mutex_);
+  return requested_interface_;
+}
+
+std::string BusRuntime::ResolvedInterface() const {
+  std::lock_guard<std::mutex> lock(*interface_mutex_);
+  return resolved_interface_.name;
+}
+
+std::string BusRuntime::InterfaceError() const {
+  std::lock_guard<std::mutex> lock(*interface_mutex_);
+  return interface_error_;
+}
+
+std::vector<NetworkInterface> BusRuntime::Interfaces() const {
+  return EnumerateNetworkInterfaces();
 }
 
 void BusRuntime::Stop() {
@@ -355,7 +403,7 @@ void BusRuntime::Run() {
       }
     }
   }
-  socket_->LeaveMulticast("239.192.0.11", "");
+  socket_->LeaveMulticast("239.192.0.11", resolved_interface_.ipv4_address);
   socket_->Close();
 }
 

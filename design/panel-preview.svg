@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" viewBox="0 0 760 520">
+  <style>
+    .panel { fill: #20252b; stroke: #707780; stroke-width: 2; }
+    .title { fill: #f0f0f0; font: bold 22px sans-serif; text-anchor: middle; }
+    .label { fill: #d7dbe0; font: 14px sans-serif; }
+    .field { fill: #f4f4f4; stroke: #8d949c; stroke-width: 1; }
+    .field-text { fill: #20252b; font: 13px monospace; }
+    .button { fill: #555e68; stroke: #aab1b8; stroke-width: 1; }
+    .button-text { fill: #ffffff; font: 12px sans-serif; text-anchor: middle; }
+    .port { fill: #161a1e; stroke: #c7cbd0; stroke-width: 3; }
+    .port-inner { fill: #8f9aa4; }
+    .caption { fill: #555e68; font: 14px sans-serif; text-anchor: middle; }
+  </style>
+
+  <rect width="760" height="520" fill="#eef0f2"/>
+  <text x="380" y="30" class="caption">VCV Network Bus — conceptual front-panel preview</text>
+
+  <!-- CV Publisher -->
+  <rect x="100" y="55" width="228" height="420" rx="4" class="panel"/>
+  <text x="214" y="88" class="title">V-CVB</text>
+  <text x="120" y="112" class="label">Host</text>
+  <rect x="120" y="121" width="188" height="34" rx="3" class="field"/>
+  <text x="130" y="143" class="field-text">studio-mac</text>
+
+  <text x="120" y="178" class="label">Topics</text>
+  <rect x="120" y="188" width="148" height="34" rx="3" class="field"/>
+  <text x="130" y="210" class="field-text">vcvb/cv</text>
+  <rect x="276" y="188" width="32" height="34" rx="3" class="button"/>
+  <text x="292" y="210" class="button-text">-</text>
+
+  <rect x="120" y="232" width="148" height="34" rx="3" class="field"/>
+  <text x="130" y="254" class="field-text">integration/cv</text>
+  <rect x="276" y="232" width="32" height="34" rx="3" class="button"/>
+  <text x="292" y="254" class="button-text">-</text>
+
+  <rect x="120" y="276" width="148" height="34" rx="3" class="field"/>
+  <text x="130" y="298" class="field-text">vcvb/audio</text>
+  <rect x="276" y="276" width="32" height="34" rx="3" class="button"/>
+  <text x="292" y="298" class="button-text">-</text>
+
+  <rect x="120" y="332" width="188" height="34" rx="3" class="button"/>
+  <text x="214" y="354" class="button-text">Add topic</text>
+  <circle cx="214" cy="428" r="20" class="port"/>
+  <circle cx="214" cy="428" r="9" class="port-inner"/>
+  <text x="214" y="466" class="caption">CV input</text>
+
+  <!-- CV Subscriber -->
+  <rect x="432" y="55" width="228" height="420" rx="4" class="panel"/>
+  <text x="546" y="88" class="title">V-CVB</text>
+  <text x="452" y="132" class="label">Topic</text>
+  <rect x="452" y="143" width="188" height="34" rx="3" class="field"/>
+  <text x="462" y="165" class="field-text">vcvb/cv</text>
+  <circle cx="546" cy="428" r="20" class="port"/>
+  <circle cx="546" cy="428" r="9" class="port-inner"/>
+  <text x="546" y="466" class="caption">CV output</text>
+</svg>

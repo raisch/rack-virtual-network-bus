@@ -59,6 +59,16 @@ bool UdpSocket::Bind(std::uint16_t port) {
   return true;
 }
 
+bool UdpSocket::SetMulticastInterface(const std::string& interface_address) {
+  in_addr address = {};
+  if (inet_pton(AF_INET, interface_address.c_str(), &address) != 1)
+    return SetError("invalid multicast interface address");
+  if (setsockopt(handle_, IPPROTO_IP, IP_MULTICAST_IF, &address,
+                 sizeof(address)) < 0)
+    return SetError(std::strerror(errno));
+  return true;
+}
+
 bool UdpSocket::JoinMulticast(const std::string& group,
                               const std::string& interface_address) {
   ip_mreq membership = {};
