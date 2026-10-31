@@ -54,24 +54,23 @@ Search the module browser for:
 
 Right-click a module body to select the topic and view diagnostics.
 
-The ARM64 package can also be built and installed with:
+After building the ARM64 package into `target/arm64/`, install it with:
 
 ```sh
 make install-arm64
 ```
 
-This target uses `../LIBS/Rack-SDK-ARM64`, rebuilds the package, and copies it
-to Rack's ARM64 user plugin directory.
+This target only copies the existing package to Rack's ARM64 user plugin
+directory; it does not compile the plugin.
 
-For an Intel Mac, use:
+After building the x86_64 package into `target/x86_64/`, install it with:
 
 ```sh
 make install-x86_64
 ```
 
-This target uses `../LIBS/Rack-SDK-X64` with
-`CROSS_COMPILE=x86_64-apple-darwin` and copies the package to Rack's x86_64
-user plugin directory.
+This target only copies the existing package to Rack's x86_64 user plugin
+directory; it does not compile the plugin.
 
 To detect the current machine architecture and install the matching package,
 use:
@@ -80,8 +79,10 @@ use:
 make install
 ```
 
-The target supports `arm64` and `x86_64` hosts and rejects unsupported
-architectures.
+The target supports `arm64` and `x86_64` hosts, copies the existing package
+for the detected architecture, and rejects unsupported architectures. It does
+not compile the plugin. The corresponding package must already exist under
+`target/`.
 
 ## Select the network interface
 
