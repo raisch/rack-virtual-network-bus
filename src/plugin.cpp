@@ -220,9 +220,9 @@ struct CvPublisherWidget : app::ModuleWidget {
     addChild(host_label);
     host_field = createWidget<NetworkTextField>(mm2px(Vec(3, 14)));
     host_field->box.size = mm2px(Vec(24, 6));
-    host_field->setText(module->host_name);
+    host_field->setText(module == NULL ? "localhost" : module->host_name);
     host_field->changed = [module](const std::string& value) {
-      module->host_name = value;
+      if (module != NULL) module->host_name = value;
     };
     addChild(host_field);
 
@@ -234,9 +234,11 @@ struct CvPublisherWidget : app::ModuleWidget {
       topic_fields[index] =
           createWidget<NetworkTextField>(mm2px(Vec(3, 27 + index * 8)));
       topic_fields[index]->box.size = mm2px(Vec(19, 6));
-      if (index < static_cast<int>(module->topics.size()))
+      if (module != NULL &&
+          index < static_cast<int>(module->topics.size()))
         topic_fields[index]->setText(module->topics[index]);
       topic_fields[index]->changed = [module, index](const std::string& value) {
+        if (module == NULL) return;
         while (module->topics.size() <= static_cast<std::size_t>(index))
           module->topics.push_back("");
         module->topics[index] = value;
@@ -248,6 +250,7 @@ struct CvPublisherWidget : app::ModuleWidget {
       delete_button->box.size = mm2px(Vec(4, 6));
       delete_button->text = "-";
       delete_button->action = [module, index, this]() {
+        if (module == NULL) return;
         if (index < static_cast<int>(module->topics.size())) {
           module->topics[index].clear();
           topic_fields[index]->setText("");
@@ -259,6 +262,7 @@ struct CvPublisherWidget : app::ModuleWidget {
     add_button->box.size = mm2px(Vec(24, 6));
     add_button->text = "Add topic";
     add_button->action = [module, this]() {
+      if (module == NULL) return;
       for (std::size_t index = 0; index < 3; ++index) {
         if (index >= module->topics.size())
           module->topics.push_back("");
@@ -313,8 +317,9 @@ struct CvSubscriberWidget : app::ModuleWidget {
     NetworkTextField* topic_field =
         createWidget<NetworkTextField>(mm2px(Vec(3, 18)));
     topic_field->box.size = mm2px(Vec(24, 6));
-    topic_field->setText(module->topic);
+    topic_field->setText(module == NULL ? "vcvb/cv" : module->topic);
     topic_field->changed = [module](const std::string& value) {
+      if (module == NULL) return;
       module->topic = value;
       module->subscription.SetTopic(value);
     };
