@@ -23,7 +23,11 @@ SOURCES += $(wildcard src/*.cc src/*/*.cc)
 FLAGS += -Isrc
 DISTRIBUTABLES += res
 
-.PHONY: install-arm64 install-x86_64
+INSTALL_GOALS := install install-arm64 install-x86_64
+
+ifneq ($(filter $(INSTALL_GOALS),$(MAKECMDGOALS)),)
+
+.PHONY: install install-arm64 install-x86_64
 
 install-arm64:
 	@test -f "$(ARM64_PACKAGE)" || \
@@ -37,12 +41,15 @@ install-x86_64:
 	mkdir -p "$(X86_64_PLUGIN_DIR)"
 	cp "$(X86_64_PACKAGE)" "$(X86_64_PLUGIN_DIR)/"
 
-include $(RACK_DIR)/plugin.mk
-
-# Override Rack SDK's build-and-install target with package-only installation.
 install:
 	@case "$$(uname -m)" in \
 		arm64) $(MAKE) install-arm64 ;; \
 		x86_64) $(MAKE) install-x86_64 ;; \
 		*) echo "Unsupported host architecture: $$(uname -m)" >&2; exit 1 ;; \
 	esac
+
+else
+
+include $(RACK_DIR)/plugin.mk
+
+endif

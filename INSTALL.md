@@ -61,7 +61,7 @@ make install-arm64
 ```
 
 This target only copies the existing package to Rack's ARM64 user plugin
-directory; it does not compile the plugin.
+directory; it does not compile the plugin and does not require the Rack SDK.
 
 After building the x86_64 package into `target/x86_64/`, install it with:
 
@@ -70,7 +70,7 @@ make install-x86_64
 ```
 
 This target only copies the existing package to Rack's x86_64 user plugin
-directory; it does not compile the plugin.
+directory; it does not compile the plugin and does not require the Rack SDK.
 
 To detect the current machine architecture and install the matching package,
 use:
@@ -81,8 +81,8 @@ make install
 
 The target supports `arm64` and `x86_64` hosts, copies the existing package
 for the detected architecture, and rejects unsupported architectures. It does
-not compile the plugin. The corresponding package must already exist under
-`target/`.
+not compile the plugin or require the Rack SDK. The corresponding package must
+already exist under `target/`.
 
 ## Select the network interface
 
