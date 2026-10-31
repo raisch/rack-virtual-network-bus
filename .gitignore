@@ -1,0 +1,5 @@
+/build
+/plugin.dylib
+/dist
+/tests/smoke_test
+/tests/smoke_test.exe

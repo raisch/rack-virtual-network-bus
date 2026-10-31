@@ -1,0 +1,17 @@
+{
+  "slug": "virtual-network-bus",
+  "name": "Virtual Network Bus",
+  "version": "2.0.0",
+  "modules": [
+    {
+      "slug": "CVPublisher",
+      "name": "CV Publisher",
+      "description": "Publishes polyphonic control voltage over the Virtual Network Bus."
+    },
+    {
+      "slug": "CVSubscriber",
+      "name": "CV Subscriber",
+      "description": "Receives polyphonic control voltage from the Virtual Network Bus."
+    }
+  ]
+}
